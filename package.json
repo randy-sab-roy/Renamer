@@ -1,0 +1,52 @@
+{
+  "name": "renamer",
+  "version": "1.0.0",
+  "description": "Bulk renamer utility",
+  "repository": "https://gitlab.com/randy-sab-roy/renamer",
+  "main": "out/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && electron ./out/main.js",
+    "postinstall": "electron-builder install-app-deps",
+    "dist": "npm run build && electron-builder"
+  },
+  "author": "Randy Sab-Roy",
+  "license": "ISC",
+  "build": {
+    "productName": "Renamer",
+    "appId": "com.randysr.renamer",
+    "files": [
+      "out/**/*",
+      "node_modules/**/*",
+      "html/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        },
+        {
+          "target": "portable"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.3.31",
+    "electron-builder": "^21.2.0",
+    "tslint": "^5.20.0",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "electron": "^6.0.9",
+    "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
+  }
+}
