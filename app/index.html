@@ -21,7 +21,7 @@
                             <div class="card bg-secondary text-white">
                                 <div class="card-body d-flex" style="padding: 0.3em 0.6em;">
                                     <b class="pr-2">Current directory:</b>
-                                    <samp id="path">/some/directory/</samp>
+                                    <samp id="path"></samp>
                                     <span id="browse" class="ml-auto clickable">
                                         <i class="fas fa-folder-open"></i>
                                     </span>
@@ -33,7 +33,7 @@
                     <!-- Search field -->
                     <div class="row mt-2">
                         <div class="col">
-                            <input id="file-search" type="text" class="form-control" placeholder="File">
+                            <input id="file-search" type="text" class="form-control" placeholder="Contains">
                         </div>
                     </div>
 
@@ -48,25 +48,17 @@
                     <div class="row mt-2 flex-grow-1 justify-content-center">
 
                         <!-- File list -->
-                        <div class="col h-100">
+                        <div class="col mh-100 overflow-auto">
                             <div class="card h-100">
-                                <ul class="list-group list-group-sm list-group-flush">
-                                    <li class="list-group-item">First item</li>
-                                    <li class="list-group-item">Second item</li>
-                                    <li class="list-group-item">Third item</li>
-                                    <li class="list-group-item">Fourth item</li>
+                                <ul id="file-list" class="list-group list-group-sm list-group-flush">
                                 </ul>
                             </div>
                         </div>
 
                         <!-- Modified file list -->
-                        <div class="col h-100">
+                        <div class="col mh-100 overflow-auto">
                             <div class="card h-100">
-                                <ul class="list-group list-group-sm list-group-flush">
-                                    <li class="list-group-item">First item</li>
-                                    <li class="list-group-item">Second item</li>
-                                    <li class="list-group-item">Third item</li>
-                                    <li class="list-group-item">Fourth item</li>
+                                <ul id="replace-list" class="list-group list-group-sm list-group-flush">
                                 </ul>
                             </div>
                         </div>
