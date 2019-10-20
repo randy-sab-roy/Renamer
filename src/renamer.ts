@@ -1,6 +1,7 @@
 import { remote } from "electron"
 import * as fs from "fs";
 
+let directoryContent: Array<string> = new Array();
 let filesToRename: Map<string, string> = new Map();
 
 function updateFilesDisplay(): void {
@@ -16,17 +17,28 @@ function updateFilesDisplay(): void {
     }
 }
 
+function applyFilter(): void {
+    const filter = $("#file-search").val() as string;
+    filesToRename.clear();    
+    directoryContent.filter(elem => elem.toLowerCase().indexOf(filter) > -1).forEach(f => filesToRename.set(f, f));
+    updateFilesDisplay();
+}
+
 $("#browse").on("click", () => {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(dialogValue => {
         if (dialogValue != null) {
             let path = dialogValue.filePaths[0];
             $("#path").text(path);
 
-            filesToRename.clear();
+            directoryContent = new Array();
             fs.readdir(path, (_, files) => {
-                files.forEach(f => filesToRename.set(f, f));
-                updateFilesDisplay();
+                files.forEach(f => directoryContent.push(f));
+                applyFilter();
             })
         }
     });
-})
+});
+
+$("#file-search").on("input", () => {
+    applyFilter();
+});
