@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html class="h-100">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Renamer</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body class="bg-primary h-100">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col">
+                <div class="h-100 d-flex flex-column">
+
+                    <!-- Search field -->
+                    <div class="row mt-4">
+                        <div class="col">
+                            <input id="file-search" type="text" class="form-control" placeholder="File">
+                        </div>
+                    </div>
+
+                    <!-- Replace field -->
+                    <div class="row mt-2">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Replace">
+                        </div>
+                    </div>
+
+                    <!-- Changes observer -->
+                    <div class="row mt-4 mb-2 flex-grow-1 justify-content-center">
+
+                        <!-- File list -->
+                        <div class="col h-100">
+                            <div class="card h-100">
+                                <ul class="list-group list-group-sm list-group-flush">
+                                    <li class="list-group-item">First item</li>
+                                    <li class="list-group-item">Second item</li>
+                                    <li class="list-group-item">Third item</li>
+                                    <li class="list-group-item">Fourth item</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Modified file list -->
+                        <div class="col h-100">
+                            <div class="card h-100">
+                                <ul class="list-group list-group-sm list-group-flush">
+                                    <li class="list-group-item">First item</li>
+                                    <li class="list-group-item">Second item</li>
+                                    <li class="list-group-item">Third item</li>
+                                    <li class="list-group-item">Fourth item</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Apply / Cancel -->
+                    <div class="row">
+                        <div class="col">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let $ = require('jquery');
+        require('popper.js');
+        require('bootstrap');
+        require("../out/renamer.js");
+    </script>
+</body>
+
+</html>

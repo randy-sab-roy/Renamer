@@ -11,7 +11,7 @@ function init(): void {
         webPreferences: { nodeIntegration: true },
     });
     mainWindow.setMenu(null);
-    mainWindow.loadFile(path.join(__dirname, "../html/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "../app/index.html"));
     mainWindow.on("close", () => { mainWindow = null });
 
     if (!app.isPackaged) {
