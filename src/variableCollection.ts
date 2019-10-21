@@ -1,9 +1,9 @@
-import { VariableText } from "./variableText";
+import { VariableText, Symbol } from "./variableText";
 
 export class VariableCollection {
 
     private variableTexts: Array<VariableText>;
-    private collectionString: string;
+    private collectionSymbols: Array<Symbol>;
 
     public constructor(texts: Array<string>) {
         this.variableTexts = new Array<VariableText>();
@@ -11,8 +11,8 @@ export class VariableCollection {
         this.initializeSymbols();
     }
 
-    public getCollectionString(): string {
-        return this.collectionString;
+    public getSymbols(): Array<Symbol> {
+        return this.collectionSymbols;
     }
 
     public updateFromCollectionString(collectionString: string): void {
@@ -21,7 +21,7 @@ export class VariableCollection {
 
     private initializeSymbols(): void {
         if (this.variableTexts.length < 2) {
-            this.collectionString = "";
+            this.collectionSymbols = new Array<Symbol>();
             return;
         }
 
@@ -58,7 +58,7 @@ export class VariableCollection {
             this.variableTexts.forEach(t => t.createSymbol(symbolIndex, smallestCommonSubstring));
         }
 
-        console.log(this.variableTexts[0].getSymbols());
+        this.collectionSymbols = this.variableTexts[0].getSymbols();
     }
 
     private static longestCommonSubstring(a: string, b: string): Array<string> {

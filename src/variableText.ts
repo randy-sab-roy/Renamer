@@ -1,4 +1,4 @@
-class Symbol {
+export class Symbol {
     public id: number;
     public text: string;
     public isVariable: boolean;
