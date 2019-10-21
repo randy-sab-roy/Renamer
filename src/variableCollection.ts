@@ -72,8 +72,7 @@ export class VariableCollection {
         }
 
         if (lastIndex < str.length) {
-            console.log("ok");
-            symbols.push(new Symbol(str.substring(lastIndex, str.length - 1), true, false));
+            symbols.push(new Symbol(str.substring(lastIndex, str.length), true, false));
         }
 
         return symbols;

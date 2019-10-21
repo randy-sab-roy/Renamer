@@ -20,25 +20,12 @@ function updateFileListView(): void {
 }
 
 function updateHighlighting(): void {
-    const marker = variableCollection.getMarker();
-    const form = $("#interactive-input");
     const echo = $("#interactive-echo");
-    const currentText = form.val() as string;
+    const currentText = $("#interactive-input").val() as string;
+    const content = $("<span></span>");
+    const parsedText = variableCollection.parseToSymbols(currentText);
 
-    let content = $("<span></span>");
-    let isWritingVar = false;
-    let lastIndex = 0;
-
-    for (let i = 0; i < currentText.length; i++) {
-        if (currentText.charAt(i) == marker) {
-            if (i - lastIndex > 0) {
-                content.append($("<span></span>").text(currentText.substring(lastIndex, isWritingVar ? i + 1 : i)).attr("class", isWritingVar ? "highlight" : ""));
-            }
-            lastIndex = isWritingVar ? i + 1 : i;
-            isWritingVar = !isWritingVar;
-        }
-    }
-
+    parsedText.forEach(s => content.append($("<span></span>").text(s.text).attr("class", s.isVariable && s.id > -1 ? "highlight" : "")));
     echo.html("");
     echo.append(content);
 }
