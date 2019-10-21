@@ -21,7 +21,25 @@ function updateFileListView(): void {
 
 function updateVariableText(): void {
     variableCollection = new VariableCollection([...filesToRename.keys()]);
-    $("#replace-form").val(variableCollection.getCollectionString());
+    const marker = variableCollection.getMarker();
+    const form = $("#replace-form");
+    let content = $("<span></span>");
+
+    for (const s of variableCollection.getCollectionSymbols()) {
+        if (s.isAssigned) {
+            if (s.isVariable) {
+                if (s.id > -1) {
+                    content.append($("<span></span>").text(marker + s.id.toString() + marker).attr("class", "badge badge-success"));
+                }
+            }
+            else {
+                content.append($("<span></span>").text(s.text));
+            }
+        }
+    }
+
+    form.html("");
+    form.append(content);
 }
 
 function changeVariableText(): void {
@@ -30,7 +48,7 @@ function changeVariableText(): void {
 
 function applyFilter(): void {
     const filter = ($("#file-search").val() as string).toLowerCase();
-    filesToRename.clear();    
+    filesToRename.clear();
     directoryContent.filter(elem => elem.toLowerCase().indexOf(filter) > -1).forEach(f => filesToRename.set(f, f));
     updateFileListView();
     updateVariableText();

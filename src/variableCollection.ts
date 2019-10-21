@@ -4,12 +4,12 @@ export class VariableCollection {
     private readonly MARKERS: Array<string> = ['$', '!', '#', '*', '@', '+', '&', '%'];
 
     private variableTexts: Array<VariableText>;
-    private collectionString: string;
+    private collectionSymbol: Array<Symbol>;
     private marker: string;
 
     public constructor(texts: Array<string>) {
         this.variableTexts = new Array<VariableText>();
-        this.collectionString = "";
+        this.collectionSymbol = new Array<Symbol>();
 
         if (this.findAvailableMarker(texts)) {
             texts.forEach(t => this.variableTexts.push(new VariableText(t)));
@@ -18,7 +18,25 @@ export class VariableCollection {
     }
 
     public getCollectionString(): string {
-        return this.collectionString;
+        let collectionString = "";
+        for (const s of this.variableTexts[0].getSymbols()) {
+            if (s.isAssigned) {
+                if (s.isVariable) {
+                    if (s.id > -1) {
+                        collectionString = collectionString.concat(this.marker.concat(s.id.toString().concat(this.marker)));
+                    }
+                }
+                else {
+                    collectionString = collectionString.concat(s.text);
+                }
+            }
+        }
+
+        return collectionString;
+    }
+
+    public getCollectionSymbols(): Array<Symbol> {
+        return this.collectionSymbol;
     }
 
     public getMarker(): string {
@@ -41,7 +59,6 @@ export class VariableCollection {
 
             if (isAvailable) {
                 this.marker = marker;
-                console.log(marker);
                 return true;
             }
         }
@@ -83,21 +100,7 @@ export class VariableCollection {
             }
         }
 
-        let collectionString = "";
-        for (const s of this.variableTexts[0].getSymbols()) {
-            if (s.isAssigned) {
-                if (s.isVariable) {
-                    if (s.id > -1) {
-                        collectionString = collectionString.concat(this.marker.concat(s.id.toString()));
-                    }
-                }
-                else {
-                    collectionString = collectionString.concat(s.text);
-                }
-            }
-        }
-
-        this.collectionString = collectionString;
+        this.collectionSymbol = this.variableTexts[0].getSymbols();
     }
 
     private static longestCommonSubstring(text: Array<string>): string {
