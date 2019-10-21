@@ -19,31 +19,40 @@ function updateFileListView(): void {
     }
 }
 
-function updateVariableText(): void {
-    variableCollection = new VariableCollection([...filesToRename.keys()]);
+function formatVariableText(): void {
     const marker = variableCollection.getMarker();
-    const form = $("#replace-form");
-    let content = $("<span></span>");
+    const form = $("#interactive-input");
+    const echo = $("#interactive-echo");
+    const currentText = form.val() as string;
 
-    for (const s of variableCollection.getCollectionSymbols()) {
-        if (s.isAssigned) {
-            if (s.isVariable) {
-                if (s.id > -1) {
-                    content.append($("<span></span>").text(marker + s.id.toString() + marker).attr("class", "badge badge-success"));
-                }
+    let content = $("<span></span>");
+    let isWritingVar = false;
+    let lastIndex = 0;
+
+    for (let i = 0; i < currentText.length; i++) {
+        if (currentText.charAt(i) == marker) {
+            if (i - lastIndex > 0) {
+                content.append($("<span></span>").text(currentText.substring(lastIndex, isWritingVar ? i + 1 : i)).attr("class", isWritingVar ? "highlight" : ""));
             }
-            else {
-                content.append($("<span></span>").text(s.text));
-            }
+            lastIndex = isWritingVar ? i + 1 : i;
+            isWritingVar = !isWritingVar;
         }
     }
 
-    form.html("");
-    form.append(content);
+    echo.html("");
+    echo.append(content);
 }
 
-function changeVariableText(): void {
-    // TODO
+function updateVariableText(): void {
+    variableCollection = new VariableCollection([...filesToRename.keys()]);
+    $("#interactive-input").val(variableCollection.getCollectionString());
+    formatVariableText();
+}
+
+function onVariableTextChange(): void {
+    // TODO: update files to rename values
+    // updateFileListView();
+    formatVariableText();
 }
 
 function applyFilter(): void {
@@ -72,5 +81,5 @@ function promptToSelectFolder(): void {
 
 $("#browse").on("click", () => promptToSelectFolder());
 $("#file-search").on("input", () => applyFilter());
-$("#replace-form").on("input", () => changeVariableText());
-$("#replace-form").on("keypress", (e) => e.which != 13);
+$("#interactive-input").on("input", () => onVariableTextChange());
+$("#interactive-input").on("keypress", (e) => e.which != 13);
