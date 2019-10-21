@@ -28,14 +28,23 @@ export class VariableCollection {
         let symbolIndex = 0;
         while (this.variableTexts[0].getFirstUnasignedSymbol() != null) {
             const symbols = this.variableTexts.map(t => t.getFirstUnasignedSymbol());
-            if (symbols.find(s => s.length < 1) !== undefined) {
+            const emptySymbols = symbols.filter(s => s.length < 1);
+
+            // All symbols are empty
+            if (emptySymbols.length == symbols.length) {
+                this.variableTexts.forEach(t => t.assignEmptyVariableSymbol());
+                continue;
+            }
+
+            // There is an ampty symbol
+            if (emptySymbols.length > 0) {
                 symbolIndex++;
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));
                 continue;
             }
 
+            // Create a symbol from the longest common substring if it exists
             const substr = VariableCollection.longestCommonSubstring(symbols);
-
             if (substr == null) {
                 symbolIndex++;
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));

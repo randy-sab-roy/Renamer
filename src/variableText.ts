@@ -52,13 +52,21 @@ export class VariableText {
         }
     }
 
+    public assignEmptyVariableSymbol() {
+        const unasigned = this.symbols.find(s => !s.isAssigned);
+        if (unasigned != undefined && unasigned.text.length < 1) {
+            unasigned.isVariable = true;
+            unasigned.isAssigned = true;
+        }
+    }
+
     public getText(): string {
         return this.symbols.map(s => s.text).join();
     }
 
     public getFirstUnasignedSymbol(): string {
-        const unasignedSymbols = this.symbols.filter(s => !s.isAssigned);
-        return unasignedSymbols[0] != null ? unasignedSymbols[0].text : null;
+        const unasignedSymbols = this.symbols.find(s => !s.isAssigned);
+        return unasignedSymbols != null ? unasignedSymbols.text : null;
     }
 
     public getSymbols(): Array<Symbol> {
