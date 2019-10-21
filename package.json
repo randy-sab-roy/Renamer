@@ -18,7 +18,7 @@
     "files": [
       "out/**/*",
       "node_modules/**/*",
-      "html/**/*",
+      "app/**/*",
       "assets/**/*",
       "package.json"
     ],
@@ -34,7 +34,6 @@
     }
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.11.2",
     "@types/jquery": "^3.3.31",
     "electron": "^6.0.9",
     "electron-builder": "^21.2.0",
@@ -43,6 +42,7 @@
     "typescript": "^3.6.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "bootstrap": "^4.3.1",
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0"
