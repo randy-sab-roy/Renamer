@@ -12,9 +12,11 @@ export class Symbol {
 }
 
 export class VariableText {
+    private originalText: string;
     private symbols: Array<Symbol>;
 
     public constructor(text: string) {
+        this.originalText = text;
         this.symbols = new Array<Symbol>();
         this.symbols.push(new Symbol(text));
     }
@@ -60,8 +62,12 @@ export class VariableText {
         }
     }
 
-    public getText(): string {
-        return this.symbols.map(s => s.text).join();
+    public getOriginalText(): string {
+        return this.originalText;
+    }
+
+    public getUpdatedText(): string {
+        return this.symbols.map(s => s.text).join('');
     }
 
     public getFirstUnasignedSymbol(): string {

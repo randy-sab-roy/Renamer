@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { VariableCollection } from "./variableCollection";
 
 let directoryContent: Array<string> = new Array();
-let filesToRename: Map<string, string> = new Map();
+// let filesToRename: Map<string, string> = new Map();
 let variableCollection: VariableCollection;
 
 function updateFileListView(): void {
@@ -13,13 +13,13 @@ function updateFileListView(): void {
     fileList.html("");
     replaceList.html("");
 
-    for (let [key, value] of filesToRename) {
-        fileList.append($("<li></li>").attr("class", "list-group-item").text(key))
-        replaceList.append($("<li></li>").attr("class", "list-group-item").text(value))
+    for (let text of variableCollection.getTexts()) {
+        fileList.append($("<li></li>").attr("class", "list-group-item").text(text.getOriginalText()));
+        replaceList.append($("<li></li>").attr("class", "list-group-item").text(text.getUpdatedText()));
     }
 }
 
-function formatVariableText(): void {
+function updateHighlighting(): void {
     const marker = variableCollection.getMarker();
     const form = $("#interactive-input");
     const echo = $("#interactive-echo");
@@ -43,24 +43,22 @@ function formatVariableText(): void {
     echo.append(content);
 }
 
-function updateVariableText(): void {
-    variableCollection = new VariableCollection([...filesToRename.keys()]);
-    $("#interactive-input").val(variableCollection.getCollectionString());
-    formatVariableText();
+function onVariableTextChange(): void {
+    variableCollection.updateFromCollectionString($("#interactive-input").val() as string);
+    updateFileListView();
+    updateHighlighting();
 }
 
-function onVariableTextChange(): void {
-    // TODO: update files to rename values
-    // updateFileListView();
-    formatVariableText();
+function updateVariableTextField(): void {
+    $("#interactive-input").val(variableCollection.getCollectionString());
+    updateHighlighting();
 }
 
 function applyFilter(): void {
     const filter = ($("#file-search").val() as string).toLowerCase();
-    filesToRename.clear();
-    directoryContent.filter(elem => elem.toLowerCase().indexOf(filter) > -1).forEach(f => filesToRename.set(f, f));
+    variableCollection = new VariableCollection(directoryContent.filter(elem => elem.toLowerCase().indexOf(filter) > -1));
     updateFileListView();
-    updateVariableText();
+    updateVariableTextField();
 }
 
 function promptToSelectFolder(): void {

@@ -17,6 +17,10 @@ export class VariableCollection {
         }
     }
 
+    public getTexts() {
+        return this.variableTexts;
+    }
+
     public getCollectionString(): string {
         let collectionString = "";
         for (const s of this.variableTexts[0].getSymbols()) {
