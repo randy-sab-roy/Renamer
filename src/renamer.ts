@@ -1,8 +1,10 @@
 import { remote } from "electron"
 import * as fs from "fs";
+import { VariableCollection } from "./variableCollection";
 
 let directoryContent: Array<string> = new Array();
 let filesToRename: Map<string, string> = new Map();
+let variableCollection: VariableCollection;
 
 function updateFileListView(): void {
     let fileList = $("#file-list");
@@ -22,11 +24,11 @@ function changeVariableText(): void {
 }
 
 function initializeVariableText(): void {
-    // TODO
+    variableCollection = new VariableCollection([...filesToRename.keys()]);
 }
 
 function applyFilter(): void {
-    const filter = $("#file-search").val() as string;
+    const filter = ($("#file-search").val() as string).toLowerCase();
     filesToRename.clear();    
     directoryContent.filter(elem => elem.toLowerCase().indexOf(filter) > -1).forEach(f => filesToRename.set(f, f));
     updateFileListView();
