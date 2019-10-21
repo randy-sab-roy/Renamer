@@ -60,3 +60,7 @@
     border-radius: 2px;
     box-shadow: 0 0 0 1px #ff2ecc;
 }
+
+li {
+    font-family: "Courier New", Courier, monospace;
+}

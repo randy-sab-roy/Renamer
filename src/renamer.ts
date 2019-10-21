@@ -6,6 +6,12 @@ import { VariableCollection } from "./variableCollection";
 let directoryContent: Array<string> = new Array();
 let variableCollection: VariableCollection;
 
+function getColorFromId(id: number, isLightColor: boolean = true): string {
+    return "hsl(" + ((200 * id) % 360) + ',' +
+        (95) + '%,' +
+        (isLightColor ? 95 : 40) + '%)'
+}
+
 function updateFileListView(): void {
     let fileList = $("#file-list");
     let replaceList = $("#replace-list");
@@ -15,14 +21,10 @@ function updateFileListView(): void {
 
     for (let text of variableCollection.getTexts()) {
         fileList.append($("<li></li>").attr("class", "list-group-item").text(text.getOriginalText()));
-        replaceList.append($("<li></li>").attr("class", "list-group-item").text(text.getUpdatedText()));
+        const replaceText = $("<li></li>").attr("class", "list-group-item");
+        text.getSymbols().forEach(s => replaceText.append($("<span></span>").text(s.text).attr("style", s.id > -1 ? "background:" + getColorFromId(s.id) + ";" : "")));
+        replaceList.append(replaceText);
     }
-}
-
-function getColorFromId(id: number, isLightColor: boolean = true): string {
-    return "hsl(" + ((200 * id) % 360) + ',' +
-        (95) + '%,' +
-        (isLightColor ? 80 : 40) + '%)'
 }
 
 function updateHighlighting(): void {
@@ -34,7 +36,7 @@ function updateHighlighting(): void {
     parsedText.forEach(s => content
         .append($("<span></span>")
             .text(s.text)
-            .attr("style", s.isVariable && s.id > -1 ? 
+            .attr("style", s.isVariable && s.id > -1 ?
                 "background:" + getColorFromId(s.id) + ";border-radius:2px;box-shadow:0 0 0 1px " + getColorFromId(s.id, false) + ";" :
                 "")));
     echo.html("");
