@@ -21,15 +21,7 @@ function updateFileListView(): void {
 
 function updateVariableText(): void {
     variableCollection = new VariableCollection([...filesToRename.keys()]);
-    const form = $("#replace-form");
-    let formText = $("<span></span>");
-
-    variableCollection.getSymbols().forEach(s => 
-        formText.append($("<span></span>").text(s.isVariable ? s.id : s.text).attr("class", s.isVariable ? "badge badge-success" : ""))
-    );
-
-    form.html("");
-    form.append(formText);
+    $("#replace-form").val(variableCollection.getCollectionString());
 }
 
 function changeVariableText(): void {

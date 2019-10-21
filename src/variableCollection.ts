@@ -4,12 +4,12 @@ export class VariableCollection {
     private readonly MARKERS: Array<string> = ['$', '!', '#', '*', '@', '+', '&', '%'];
 
     private variableTexts: Array<VariableText>;
-    private collectionSymbols: Array<Symbol>;
+    private collectionString: string;
     private marker: string;
 
     public constructor(texts: Array<string>) {
         this.variableTexts = new Array<VariableText>();
-        this.collectionSymbols = new Array<Symbol>();
+        this.collectionString = "";
 
         if (this.findAvailableMarker(texts)) {
             texts.forEach(t => this.variableTexts.push(new VariableText(t)));
@@ -17,8 +17,12 @@ export class VariableCollection {
         }
     }
 
-    public getSymbols(): Array<Symbol> {
-        return this.collectionSymbols;
+    public getCollectionString(): string {
+        return this.collectionString;
+    }
+
+    public getMarker(): string {
+        return this.marker;
     }
 
     public updateFromCollectionString(collectionString: string): void {
@@ -79,7 +83,21 @@ export class VariableCollection {
             }
         }
 
-        this.collectionSymbols = this.variableTexts[0].getSymbols();
+        let collectionString = "";
+        for (const s of this.variableTexts[0].getSymbols()) {
+            if (s.isAssigned) {
+                if (s.isVariable) {
+                    if (s.id > -1) {
+                        collectionString = collectionString.concat(this.marker.concat(s.id.toString()));
+                    }
+                }
+                else {
+                    collectionString = collectionString.concat(s.text);
+                }
+            }
+        }
+
+        this.collectionString = collectionString;
     }
 
     private static longestCommonSubstring(text: Array<string>): string {
