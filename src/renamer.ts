@@ -4,7 +4,7 @@ import * as fs from "fs";
 let directoryContent: Array<string> = new Array();
 let filesToRename: Map<string, string> = new Map();
 
-function updateFilesDisplay(): void {
+function updateFileListView(): void {
     let fileList = $("#file-list");
     let replaceList = $("#replace-list");
 
@@ -17,14 +17,23 @@ function updateFilesDisplay(): void {
     }
 }
 
+function changeVariableText(): void {
+    // TODO
+}
+
+function initializeVariableText(): void {
+    // TODO
+}
+
 function applyFilter(): void {
     const filter = $("#file-search").val() as string;
     filesToRename.clear();    
     directoryContent.filter(elem => elem.toLowerCase().indexOf(filter) > -1).forEach(f => filesToRename.set(f, f));
-    updateFilesDisplay();
+    updateFileListView();
+    initializeVariableText();
 }
 
-$("#browse").on("click", () => {
+function promptToSelectFolder(): void {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(dialogValue => {
         if (dialogValue != null) {
             let path = dialogValue.filePaths[0];
@@ -37,8 +46,10 @@ $("#browse").on("click", () => {
             })
         }
     });
-});
+}
 
-$("#file-search").on("input", () => {
-    applyFilter();
-});
+
+$("#browse").on("click", () => promptToSelectFolder());
+$("#file-search").on("input", () => applyFilter());
+$("#replace-form").on("input", () => changeVariableText());
+$("#replace-form").on("keypress", (e) => e.which != 13);
