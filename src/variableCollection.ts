@@ -26,25 +26,25 @@ export class VariableCollection {
         }
 
         let symbolIndex = 0;
-        while (this.variableTexts[0].getFirstUnasignedSymbol != null) {
+        while (this.variableTexts[0].getFirstUnasignedSymbol() != null) {
             symbolIndex++;
             const symbols = this.variableTexts.map(t => t.getFirstUnasignedSymbol());
-            console.log(symbols);
             if (symbols.find(s => s.length < 2)) {
+                console.log("Iteration contains too small items");
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));
                 continue;
             }
 
-            const lcss = new Array<string>();
+            const commonSubstrings = new Array<string>();
             for (let i = 0; i < symbols.length - 1; i++) {
-                lcss.push(VariableCollection.lcs(symbols[i], symbols[i + 1]));
+                commonSubstrings.push(...VariableCollection.longestCommonSubstring(symbols[i], symbols[i + 1]));
             }
 
-            const smallestLcs = lcss.sort((a, b) => a.length - b.length)[0];
+            const smallestCommonSubstring = commonSubstrings.sort((a, b) => a.length - b.length)[0];
             let isSmallestContainedInAll = true;
-            
+
             for (let i = 0; i < symbols.length; i++) {
-                if (symbols[i].indexOf(smallestLcs) < 0) {
+                if (symbols[i].indexOf(smallestCommonSubstring) < 0) {
                     isSmallestContainedInAll = false;
                     break;
                 }
@@ -55,24 +55,40 @@ export class VariableCollection {
                 continue;
             }
 
-            this.variableTexts.forEach(t => t.createSymbol(symbolIndex, smallestLcs));
+            this.variableTexts.forEach(t => t.createSymbol(symbolIndex, smallestCommonSubstring));
         }
 
-        console.log(this.variableTexts[0].getSymbols())
+        console.log(this.variableTexts[0].getSymbols());
     }
 
-    private static lcs(a: string, b: string): string {
-        var m = a.length, n = b.length,
-            C = [], i, j;
-        for (i = 0; i <= m; i++) C.push([0]);
-        for (j = 0; j < n; j++) C[0].push(0);
-        for (i = 0; i < m; i++)
-            for (j = 0; j < n; j++)
-                C[i + 1][j + 1] = a[i] === b[j] ? C[i][j] + 1 : Math.max(C[i + 1][j], C[i][j + 1]);
-        return (function bt(i, j): string {
-            if (i * j === 0) { return ""; }
-            if (a[i - 1] === b[j - 1]) { return bt(i - 1, j - 1) + a[i - 1]; }
-            return (C[i][j - 1] > C[i - 1][j]) ? bt(i, j - 1) : bt(i - 1, j);
-        }(m, n));
+    private static longestCommonSubstring(a: string, b: string): Array<string> {
+        const L = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
+        let c = new Array<string>();
+        let z = 0;
+
+        for (let i = 0; i < a.length; i++) {
+            for (let j = 0; j < b.length; j++) {
+                if (a[i] === b[j]) {
+                    if (i === 0 || j === 0) {
+                        L[i][j] = 1;
+                    }
+                    else {
+                        L[i][j] = L[i - 1][j - 1] + 1;
+                    }
+                    if (L[i][j] > z) {
+                        z = L[i][j];
+                        c = [a.substr(i - z + 1, z)];
+                    }
+                    else if (z == c.length) {
+                        c.push(a.substr(i - z + 1, z));
+                    }
+                }
+                else {
+                    L[i][j] = 0;
+                }
+            }
+        }
+
+        return c;
     }
 }
