@@ -1,5 +1,6 @@
 import { remote } from "electron"
 import * as fs from "fs";
+import * as path_module from "path";
 import { VariableCollection } from "./variableCollection";
 
 let directoryContent: Array<string> = new Array();
@@ -70,7 +71,15 @@ function promptToSelectFolder(): void {
 }
 
 function apply(): void {
-    // TODO
+    const path = $("#path").text();
+    variableCollection.getTexts().forEach(t => {
+        const originalPath = path_module.join(path, t.getOriginalText());
+        const newPath = path_module.join(path, t.getUpdatedText());
+        if (fs.existsSync(originalPath)) {
+            fs.renameSync(originalPath, newPath);
+        }
+    });
+    loadFolder(path);
 }
 
 $("#browse").on("click", () => promptToSelectFolder());
