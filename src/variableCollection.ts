@@ -34,60 +34,49 @@ export class VariableCollection {
                 continue;
             }
 
-            const commonSubstrings = new Array<string>();
-            for (let i = 0; i < symbols.length - 1; i++) {
-                commonSubstrings.push(...VariableCollection.longestCommonSubstring(symbols[i], symbols[i + 1]));
-            }
+            const substr = VariableCollection.longestCommonSubstring(symbols);
 
-            const smallestCommonSubstring = commonSubstrings.sort((a, b) => a.length - b.length)[0];
-            let isSmallestContainedInAll = true;
-
-            for (let i = 0; i < symbols.length; i++) {
-                if (symbols[i].indexOf(smallestCommonSubstring) < 0) {
-                    isSmallestContainedInAll = false;
-                    break;
-                }
-            }
-
-            if (!isSmallestContainedInAll) {
+            if (substr == null) {
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));
-                continue;
             }
-
-            this.variableTexts.forEach(t => t.createSymbol(symbolIndex, smallestCommonSubstring));
+            else {
+                this.variableTexts.forEach(t => t.createSymbol(symbolIndex, substr));
+            }
         }
 
         this.collectionSymbols = this.variableTexts[0].getSymbols();
     }
 
-    private static longestCommonSubstring(a: string, b: string): Array<string> {
-        const L = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
-        let c = new Array<string>();
-        let z = 0;
+    private static longestCommonSubstring(text: Array<string>): string {
+        let substrings = this.getAllSubstrings(text[0]);
+        substrings.sort((a, b) => b.length - a.length);
 
-        for (let i = 0; i < a.length; i++) {
-            for (let j = 0; j < b.length; j++) {
-                if (a[i] === b[j]) {
-                    if (i === 0 || j === 0) {
-                        L[i][j] = 1;
-                    }
-                    else {
-                        L[i][j] = L[i - 1][j - 1] + 1;
-                    }
-                    if (L[i][j] > z) {
-                        z = L[i][j];
-                        c = [a.substr(i - z + 1, z)];
-                    }
-                    else if (z == c.length) {
-                        c.push(a.substr(i - z + 1, z));
-                    }
+        let substring: string = null;
+        for (const s of substrings) {
+            let isEverywhere = true;
+            for (const t of text) {
+                if (t.indexOf(s) < 0) {
+                    isEverywhere = false;
+                    break;
                 }
-                else {
-                    L[i][j] = 0;
-                }
+            }
+
+            if (isEverywhere) {
+                substring = s;
+                break;
             }
         }
 
-        return c;
+        return substring;
+    }
+
+    private static getAllSubstrings(str: string) {
+        let i, j, result = [];
+        for (i = 0; i < str.length; i++) {
+            for (j = i + 1; j < str.length + 1; j++) {
+                result.push(str.slice(i, j));
+            }
+        }
+        return result;
     }
 }
