@@ -1,14 +1,20 @@
 import { VariableText, Symbol } from "./variableText";
 
 export class VariableCollection {
+    private readonly MARKERS: Array<string> = ['$', '!', '#', '*', '@', '+', '&', '%'];
 
     private variableTexts: Array<VariableText>;
     private collectionSymbols: Array<Symbol>;
+    private marker: string;
 
     public constructor(texts: Array<string>) {
         this.variableTexts = new Array<VariableText>();
-        texts.forEach(t => this.variableTexts.push(new VariableText(t)));
-        this.initializeSymbols();
+        this.collectionSymbols = new Array<Symbol>();
+
+        if (this.findAvailableMarker(texts)) {
+            texts.forEach(t => this.variableTexts.push(new VariableText(t)));
+            this.initializeSymbols();
+        }
     }
 
     public getSymbols(): Array<Symbol> {
@@ -19,9 +25,28 @@ export class VariableCollection {
         // TODO
     }
 
+    private findAvailableMarker(texts: Array<string>): boolean {
+        for (const marker of this.MARKERS) {
+            let isAvailable = true;
+            for (const text of texts) {
+                if (text.indexOf(marker) > -1) {
+                    isAvailable = false;
+                    break;
+                }
+            }
+
+            if (isAvailable) {
+                this.marker = marker;
+                console.log(marker);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private initializeSymbols(): void {
         if (this.variableTexts.length < 2) {
-            this.collectionSymbols = new Array<Symbol>();
             return;
         }
 

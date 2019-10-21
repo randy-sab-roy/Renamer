@@ -46,7 +46,7 @@ function applyFilter(): void {
 
 function promptToSelectFolder(): void {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(dialogValue => {
-        if (dialogValue != null) {
+        if (dialogValue != null && !dialogValue.canceled) {
             let path = dialogValue.filePaths[0];
             $("#path").text(path);
 
