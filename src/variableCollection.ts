@@ -27,9 +27,9 @@ export class VariableCollection {
 
         let symbolIndex = 0;
         while (this.variableTexts[0].getFirstUnasignedSymbol() != null) {
-            symbolIndex++;
             const symbols = this.variableTexts.map(t => t.getFirstUnasignedSymbol());
-            if (symbols.find(s => s.length < 2) !== undefined) {
+            if (symbols.find(s => s.length < 1) !== undefined) {
+                symbolIndex++;
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));
                 continue;
             }
@@ -37,10 +37,11 @@ export class VariableCollection {
             const substr = VariableCollection.longestCommonSubstring(symbols);
 
             if (substr == null) {
+                symbolIndex++;
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));
             }
             else {
-                this.variableTexts.forEach(t => t.createSymbol(symbolIndex, substr));
+                this.variableTexts.forEach(t => t.createCommonSymbol(substr));
             }
         }
 

@@ -2,11 +2,12 @@ export class Symbol {
     public id: number;
     public text: string;
     public isVariable: boolean;
+    public isAssigned: boolean;
 
-    public constructor(text: string, id = -1, isVariable = false) {
-        this.id = id;
+    public constructor(text: string, isAssigned = false, isVariable = false) {
         this.text = text;
         this.isVariable = isVariable;
+        this.isAssigned = isAssigned;
     }
 }
 
@@ -18,11 +19,11 @@ export class VariableText {
         this.symbols.push(new Symbol(text));
     }
 
-    public createSymbol(id: number, value: string): void {
+    public createCommonSymbol(value: string): void {
         const newSymbols = new Array<Symbol>();
         let foundSymbol = false;
         this.symbols.forEach(s => {
-            if (s.id > -1) {
+            if (s.isAssigned) {
                 newSymbols.push(s);
             }
             else {
@@ -33,7 +34,7 @@ export class VariableText {
                 else {
                     foundSymbol = true;
                     newSymbols.push(new Symbol(s.text.substring(0, index)));
-                    newSymbols.push(new Symbol(s.text.substr(index, value.length), id));
+                    newSymbols.push(new Symbol(s.text.substr(index, value.length), true));
                     newSymbols.push(new Symbol(s.text.substring(index + value.length, s.text.length)));
                 }
             }
@@ -43,9 +44,10 @@ export class VariableText {
     }
 
     public createVariableSymbol(id: number) {
-        const unasigned = this.symbols.find(s => s.id < 0);
+        const unasigned = this.symbols.find(s => !s.isAssigned);
         if (unasigned != undefined) {
             unasigned.isVariable = true;
+            unasigned.isAssigned = true;
             unasigned.id = id;
         }
     }
@@ -55,7 +57,7 @@ export class VariableText {
     }
 
     public getFirstUnasignedSymbol(): string {
-        const unasignedSymbols = this.symbols.filter(s => s.id < 0);
+        const unasignedSymbols = this.symbols.filter(s => !s.isAssigned);
         return unasignedSymbols[0] != null ? unasignedSymbols[0].text : null;
     }
 
