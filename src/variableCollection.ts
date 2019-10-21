@@ -29,8 +29,7 @@ export class VariableCollection {
         while (this.variableTexts[0].getFirstUnasignedSymbol() != null) {
             symbolIndex++;
             const symbols = this.variableTexts.map(t => t.getFirstUnasignedSymbol());
-            if (symbols.find(s => s.length < 2)) {
-                console.log("Iteration contains too small items");
+            if (symbols.find(s => s.length < 2) !== undefined) {
                 this.variableTexts.forEach(t => t.createVariableSymbol(symbolIndex));
                 continue;
             }
