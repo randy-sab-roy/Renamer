@@ -19,13 +19,24 @@ function updateFileListView(): void {
     }
 }
 
+function getColorFromId(id: number, isLightColor: boolean = true): string {
+    return "hsl(" + ((200 * id) % 360) + ',' +
+        (95) + '%,' +
+        (isLightColor ? 80 : 40) + '%)'
+}
+
 function updateHighlighting(): void {
     const echo = $("#interactive-echo");
     const currentText = $("#interactive-input").val() as string;
     const content = $("<span></span>");
     const parsedText = variableCollection.parseToSymbols(currentText);
 
-    parsedText.forEach(s => content.append($("<span></span>").text(s.text).attr("class", s.isVariable && s.id > -1 ? "highlight" : "")));
+    parsedText.forEach(s => content
+        .append($("<span></span>")
+            .text(s.text)
+            .attr("style", s.isVariable && s.id > -1 ? 
+                "background:" + getColorFromId(s.id) + ";border-radius:2px;box-shadow:0 0 0 1px " + getColorFromId(s.id, false) + ";" :
+                "")));
     echo.html("");
     echo.append(content);
 }
@@ -51,7 +62,7 @@ function applyFilter(): void {
 function loadFolder(path: string): void {
     if (path == null)
         return;
-        
+
     $("#path").text(path);
 
     directoryContent = new Array();
