@@ -17,14 +17,13 @@
     background: none;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
-    font: inherit;
-    font-family: "Courier New", Courier, monospace;
     display: block;
     padding: 0.375rem 0.75rem;
     width: 100%;
     z-index: 0;
     font-size: 1rem;
     font-weight: 400;
+    font-family: "Courier New", Courier, monospace;
     line-height: 1.5;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     letter-spacing: 0.1em;
@@ -51,8 +50,8 @@
     background-color: white;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.5;
     font-family: "Courier New", Courier, monospace;
+    line-height: 1.5;
     letter-spacing: 0.1em;
 }
 

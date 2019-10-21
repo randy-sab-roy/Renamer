@@ -4,21 +4,24 @@ export class Symbol {
     public isVariable: boolean;
     public isAssigned: boolean;
 
-    public constructor(text: string, isAssigned = false, isVariable = false) {
+    public constructor(text: string, isAssigned = false, isVariable = false, id = -1) {
         this.text = text;
         this.isVariable = isVariable;
         this.isAssigned = isAssigned;
+        this.id = id;
     }
 }
 
 export class VariableText {
     private originalText: string;
     private symbols: Array<Symbol>;
+    private variableMap: Map<number, string>;
 
     public constructor(text: string) {
         this.originalText = text;
         this.symbols = new Array<Symbol>();
         this.symbols.push(new Symbol(text));
+        this.variableMap = new Map<number, string>();
     }
 
     public createCommonSymbol(value: string): void {
@@ -51,6 +54,7 @@ export class VariableText {
             unasigned.isVariable = true;
             unasigned.isAssigned = true;
             unasigned.id = id;
+            this.variableMap.set(id, unasigned.text);
         }
     }
 
@@ -77,5 +81,16 @@ export class VariableText {
 
     public getSymbols(): Array<Symbol> {
         return this.symbols;
+    }
+
+    public updateFromSymbols(symbols: Array<Symbol>) {
+        this.symbols = new Array<Symbol>();
+        symbols.forEach(s => {
+            const symbol = new Symbol(s.text, s.isAssigned, s.isVariable, s.id);
+            if (symbol.isVariable && this.variableMap.has(symbol.id)) {
+                symbol.text = this.variableMap.get(symbol.id);
+            }
+            this.symbols.push(symbol);
+        });
     }
 }

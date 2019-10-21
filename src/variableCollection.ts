@@ -39,16 +39,44 @@ export class VariableCollection {
         return collectionString;
     }
 
-    public getCollectionSymbols(): Array<Symbol> {
-        return this.collectionSymbol;
-    }
-
     public getMarker(): string {
         return this.marker;
     }
 
     public updateFromCollectionString(collectionString: string): void {
-        // TODO
+        const symbols = this.parseToSymbols(collectionString);
+        this.variableTexts.forEach(t => t.updateFromSymbols(symbols));
+    }
+
+    public parseToSymbols(str: string): Array<Symbol> {
+        const symbols = new Array<Symbol>();
+
+        let isVariable = false;
+        let lastIndex = 0;
+
+        for (let i = 0; i < str.length; i++) {
+            if (str.charAt(i) == this.marker) {
+                if (i - lastIndex > 0) {
+                    if (isVariable) {
+                        const text = str.substring(lastIndex, i + 1);
+                        const id = text.length > 2 ? Number(text.substr(1, text.length - 2)) : -1;
+                        symbols.push(new Symbol(str.substring(lastIndex, i + 1), true, isVariable, id));
+                    }
+                    else {
+                        symbols.push(new Symbol(str.substring(lastIndex, i), true, isVariable));
+                    }
+                }
+                lastIndex = isVariable ? i + 1 : i;
+                isVariable = !isVariable;
+            }
+        }
+
+        if (lastIndex < str.length) {
+            console.log("ok");
+            symbols.push(new Symbol(str.substring(lastIndex, str.length - 1), true, false));
+        }
+
+        return symbols;
     }
 
     private findAvailableMarker(texts: Array<string>): boolean {
