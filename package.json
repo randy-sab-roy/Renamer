@@ -25,12 +25,8 @@
     "directories": {
       "buildResources": "assets"
     },
-    "win": {
-      "target": [
-        {
-          "target": "nsis"
-        }
-      ]
+    "nsis": {
+      "include": "assets/installer.nsh"
     }
   },
   "devDependencies": {
