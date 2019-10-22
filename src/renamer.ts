@@ -92,7 +92,7 @@ function apply(): void {
     variableCollection.getTexts().forEach(t => {
         const originalPath = path_module.join(path, t.getOriginalText());
         const newPath = path_module.join(path, t.getUpdatedText());
-        if (fs.existsSync(originalPath)) {
+        if (fs.existsSync(originalPath) && !fs.existsSync(newPath)) {
             fs.renameSync(originalPath, newPath);
         }
     });
