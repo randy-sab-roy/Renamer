@@ -9,7 +9,7 @@ let variableCollection: VariableCollection;
 function getColorFromId(id: number, isLightColor: boolean = true): string {
     return "hsl(" + ((200 * id) % 360) + ',' +
         (95) + '%,' +
-        (isLightColor ? 95 : 40) + '%)'
+        (isLightColor ? 97 : 40) + '%)'
 }
 
 function updateFileListView(): void {
@@ -20,7 +20,10 @@ function updateFileListView(): void {
     replaceList.html("");
 
     for (let text of variableCollection.getTexts()) {
-        fileList.append($("<li></li>").attr("class", "list-group-item").text(text.getOriginalText()));
+        const originalText = $("<li></li>").attr("class", "list-group-item");
+        text.getOriginalSymbols().forEach(s => originalText.append($("<span></span>").text(s.text).attr("style", s.id > -1 ? "background:" + getColorFromId(s.id) + ";" : "")));
+        fileList.append(originalText);
+
         const replaceText = $("<li></li>").attr("class", "list-group-item");
         text.getSymbols().forEach(s => replaceText.append($("<span></span>").text(s.text).attr("style", s.id > -1 ? "background:" + getColorFromId(s.id) + ";" : "")));
         replaceList.append(replaceText);

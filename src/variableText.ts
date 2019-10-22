@@ -14,11 +14,13 @@ export class Symbol {
 
 export class VariableText {
     private originalText: string;
+    private originalSymbols: Array<Symbol>;
     private symbols: Array<Symbol>;
     private variableMap: Map<number, string>;
 
     public constructor(text: string) {
         this.originalText = text;
+        this.originalSymbols = null;
         this.symbols = new Array<Symbol>();
         this.symbols.push(new Symbol(text));
         this.variableMap = new Map<number, string>();
@@ -70,6 +72,10 @@ export class VariableText {
         return this.originalText;
     }
 
+    public getOriginalSymbols(): Array<Symbol> {
+        return this.originalSymbols == null ? this.symbols : this.originalSymbols;
+    }
+
     public getUpdatedText(): string {
         return this.symbols.map(s => s.text).join('');
     }
@@ -84,6 +90,10 @@ export class VariableText {
     }
 
     public updateFromSymbols(symbols: Array<Symbol>) {
+        if (this.originalSymbols == null) {
+            this.originalSymbols = this.symbols;
+        }
+
         this.symbols = new Array<Symbol>();
         symbols.forEach(s => {
             const symbol = new Symbol(s.text, s.isAssigned, s.isVariable, s.id);
