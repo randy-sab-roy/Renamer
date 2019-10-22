@@ -98,8 +98,16 @@ function apply(): void {
     loadFolder(path);
 }
 
+function executeKeyboardShortcuts(e: KeyboardEvent): void {
+    // ctrl + o
+    if (e.ctrlKey && e.which == 79) {
+        promptToSelectFolder();
+    }
+}
+
 $("#browse").on("click", () => promptToSelectFolder());
 $("#file-search").on("input", () => applyFilter());
 $("#interactive-input").on("input", () => onVariableTextChange());
 $("#interactive-input").on("keypress", (e) => e.which != 13);
 $("#apply").on("click", () => apply());
+window.addEventListener('keyup', executeKeyboardShortcuts, true)
