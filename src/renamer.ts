@@ -65,8 +65,11 @@ function applyFilter(): void {
 }
 
 function tryLoadFolder(path: string): void {
+    if (path == null || path == "")
+        return;
+
     path = path_module.join(path.replace("\"", "").replace("\"", ""));
-    if (path == null || !fs.existsSync(path))
+    if (!fs.existsSync(path))
         return;
 
     $("#path").text(path);
@@ -76,6 +79,11 @@ function tryLoadFolder(path: string): void {
         files.forEach(f => directoryContent.push(f));
         applyFilter();
     });
+}
+
+function reloadFolder(): void {
+    const path = $("#path").text();
+    tryLoadFolder(path);
 }
 
 function promptToSelectFolder(): void {
@@ -104,6 +112,11 @@ function checkForKeyboardShortcut(e: KeyboardEvent): void {
     if (e.ctrlKey && e.which == 79) {
         promptToSelectFolder();
     }
+
+    // ctrl + r
+    if (e.ctrlKey && e.which == 82) {
+        reloadFolder();
+    }
 }
 
 function init(): void {
@@ -117,6 +130,7 @@ function init(): void {
 }
 
 $("#browse").on("click", () => promptToSelectFolder());
+$("#reload").on("click", () => reloadFolder());
 $("#file-search").on("input", () => applyFilter());
 $("#interactive-input").on("input", () => onVariableTextChange());
 $("#interactive-input").on("keypress", (e) => e.which != 13);

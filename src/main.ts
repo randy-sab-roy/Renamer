@@ -19,7 +19,7 @@ function init(): void {
             label: "Options",
             submenu: [
                 { label: "Dev Console", accelerator: "F12", click: () => mainWindow.webContents.openDevTools() },
-                { label: "Reload", accelerator: "CommandOrControl+R", click: () => mainWindow.reload() }
+                { label: "Reload", accelerator: "F5", click: () => mainWindow.reload() }
             ]
         }]));
     }
