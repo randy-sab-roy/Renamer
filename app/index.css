@@ -4,6 +4,15 @@
 
 .clickable {
     cursor: pointer;
+    transition-duration: 0.2s;
+}
+  
+.clickable:hover {
+    color: rgb(204, 204, 204);
+}
+
+.clickable:active {
+    color: rgb(167, 167, 167);
 }
 
 #interactive-box {
