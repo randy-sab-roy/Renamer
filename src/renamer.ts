@@ -5,6 +5,7 @@ import { VariableCollection } from "./variableCollection";
 
 let directoryContent: Array<string> = new Array();
 let variableCollection: VariableCollection;
+let isBrowseOpen: boolean = false;
 
 function getColorFromId(id: number, isLightColor: boolean = true): string {
     return "hsl(" + ((200 * id) % 360) + ',' +
@@ -87,12 +88,15 @@ function reloadFolder(): void {
 }
 
 function promptToSelectFolder(): void {
-    remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(dialogValue => {
-        if (dialogValue != null && !dialogValue.canceled) {
-            let path = dialogValue.filePaths[0];
-            tryLoadFolder(path);
-        }
-    });
+    if (!isBrowseOpen) {
+        isBrowseOpen = true;
+        remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(dialogValue => {
+            if (dialogValue != null && !dialogValue.canceled) {
+                let path = dialogValue.filePaths[0];
+                tryLoadFolder(path);
+            }
+        }).finally(() => isBrowseOpen = false);
+    }
 }
 
 function apply(): void {
