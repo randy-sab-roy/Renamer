@@ -64,8 +64,9 @@ function applyFilter(): void {
     updateVariableTextField();
 }
 
-function loadFolder(path: string): void {
-    if (path == null)
+function tryLoadFolder(path: string): void {
+    path = path_module.join(path.replace("\"", "").replace("\"", ""));
+    if (path == null || !fs.existsSync(path))
         return;
 
     $("#path").text(path);
@@ -74,14 +75,14 @@ function loadFolder(path: string): void {
     fs.readdir(path, (_, files) => {
         files.forEach(f => directoryContent.push(f));
         applyFilter();
-    })
+    });
 }
 
 function promptToSelectFolder(): void {
     remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(dialogValue => {
         if (dialogValue != null && !dialogValue.canceled) {
             let path = dialogValue.filePaths[0];
-            loadFolder(path);
+            tryLoadFolder(path);
         }
     });
 }
@@ -95,13 +96,23 @@ function apply(): void {
             fs.renameSync(originalPath, newPath);
         }
     });
-    loadFolder(path);
+    tryLoadFolder(path);
 }
 
-function executeKeyboardShortcuts(e: KeyboardEvent): void {
+function checkForKeyboardShortcut(e: KeyboardEvent): void {
     // ctrl + o
     if (e.ctrlKey && e.which == 79) {
         promptToSelectFolder();
+    }
+}
+
+function init(): void {
+    const args = remote.process.argv;
+    for (let i = 0; i < args.length; i++) {
+        if (args[i] == "--dir" && i < args.length - 1) {
+            tryLoadFolder(args[i + 1]);
+            return;
+        }
     }
 }
 
@@ -110,4 +121,6 @@ $("#file-search").on("input", () => applyFilter());
 $("#interactive-input").on("input", () => onVariableTextChange());
 $("#interactive-input").on("keypress", (e) => e.which != 13);
 $("#apply").on("click", () => apply());
-window.addEventListener('keyup', executeKeyboardShortcuts, true)
+window.addEventListener('keyup', checkForKeyboardShortcut, true)
+
+init();

@@ -1,9 +1,6 @@
 !macro customInstall
-  ReadRegStr $R0 HKCU "Software\Classes\directory\Background\shell\Renamer\command" ""
-  ${If} $R0 == ""
-    WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer" "" "Bulk Rename"
-    WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer\command" "" '"$INSTDIR\Renamer.exe" \"%V\"'
-  ${EndIf}
+  WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer" "" "Bulk Rename"
+  WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer\command" "" '"$INSTDIR\Renamer.exe" --dir \"%V\"'
 !macroend
 
 !macro customUnInstall
