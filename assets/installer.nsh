@@ -1,6 +1,6 @@
 !macro customInstall
   WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer" "" "Bulk Rename"
-  WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer\command" "" '"$INSTDIR\Renamer.exe" --dir \"%V\"'
+  WriteRegStr HKCU "Software\Classes\directory\Background\shell\Renamer\command" "" '"$INSTDIR\Renamer.exe" --dir "\"%V\""'
 !macroend
 
 !macro customUnInstall
