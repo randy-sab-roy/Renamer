@@ -10,7 +10,7 @@
     "postinstall": "electron-builder install-app-deps",
     "dist": "npm run build && electron-builder"
   },
-  "author": "Randy Sab-Roy",
+  "author": "Randy Sab-Roy <randy.sab.roy@gmail.com>",
   "license": "ISC",
   "build": {
     "productName": "Renamer",
@@ -27,6 +27,15 @@
     },
     "nsis": {
       "include": "assets/installer.nsh"
+    },
+    "linux": {
+      "category": "Utility",
+      "executableName": "Renamer",
+      "target": [
+        {
+          "target": "deb"
+        }
+      ]
     }
   },
   "devDependencies": {

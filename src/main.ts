@@ -22,6 +22,8 @@ function init(): void {
                 { label: "Reload", accelerator: "F5", click: () => mainWindow.reload() }
             ]
         }]));
+    } else {
+        mainWindow.setMenuBarVisibility(false);
     }
 
     mainWindow.show();
