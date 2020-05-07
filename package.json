@@ -1,6 +1,6 @@
 {
   "name": "renamer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Bulk renamer utility",
   "repository": "https://github.com/randy-sab-roy/Renamer",
   "main": "out/main.js",
