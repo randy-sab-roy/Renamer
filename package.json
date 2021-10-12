@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.3.31",
-    "electron": "^6.0.9",
+    "electron": "^11.5.0",
     "electron-builder": "^21.2.0",
     "tslint": "^5.20.0",
     "tslint-microsoft-contrib": "^6.2.0",
